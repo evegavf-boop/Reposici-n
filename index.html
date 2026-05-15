@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,10 @@
     <meta name="apple-mobile-web-app-title" content="Reposiciones">
     <meta name="mobile-web-app-capable" content="yes">
 
+    <!-- Iconos de la Aplicación -->
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/AVS-PROJECTS33/La_mediterrania/main/Gemini_Generated_Image_m2vh8km2vh8km2vh.png">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/AVS-PROJECTS33/La_mediterrania/main/Gemini_Generated_Image_m2vh8km2vh8km2vh.png">
+
     <!-- Librerías Externas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -18,14 +22,25 @@
     <!-- Fuentes para mantener la estética -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
+        /* ======================================================== */
+        /* IMAGEN DE FONDO BOTÁNICA                                 */
+        /* ======================================================== */
+        :root {
+            --bg-image: url('https://raw.githubusercontent.com/AVS-PROJECTS33/La_mediterrania/main/Gemini_Generated_Image_5gwb1i5gwb1i5gwb.png');
+        }
+
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: #f8fafc; /* slate-50 */
-            color: #1e293b; /* slate-800 */
+            background-image: var(--bg-image);
+            background-size: cover;
+            background-position: center 35%;
+            background-attachment: fixed;
+            color: #f1f5f9; /* slate-100 */
         }
+        
         .font-logo {
             font-family: 'Cormorant Garamond', serif;
             letter-spacing: 0.02em;
@@ -35,6 +50,7 @@
         /* Animaciones para App Nativa */
         .animate-enter { animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-leave { animation: fadeOut 0.2s ease-in forwards; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
         
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -44,113 +60,145 @@
             from { opacity: 1; transform: scale(1); }
             to { opacity: 0; transform: scale(0.95); }
         }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
-<body class="min-h-screen selection:bg-indigo-100 bg-slate-50">
+<body class="min-h-screen selection:bg-emerald-900 pb-20">
 
-    <!-- Cabecera Elegante -->
-    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-20 border-b border-slate-200/60">
-        <div class="max-w-3xl mx-auto px-4 py-4 sm:px-6 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-indigo-600 p-2 rounded-xl shadow-inner shadow-indigo-800/20 text-white">
-                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6">
+        
+        <!-- Cabecera Elegante (Estilo La Mediterrania) -->
+        <header class="flex items-center justify-between mb-8 bg-slate-900/60 backdrop-blur-md p-4 md:p-5 rounded-2xl shadow-lg border border-slate-700/40">
+            <!-- Izquierda: Logo y Título -->
+            <div class="flex items-center gap-3 md:gap-4">
+                <div class="p-1">
+                    <img src="https://raw.githubusercontent.com/AVS-PROJECTS33/La_mediterrania/main/Gemini_Generated_Image_m2vh8km2vh8km2vh.png" alt="Logo La Mediterrania" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shadow-md">
                 </div>
-                <div>
-                    <h1 class="text-xl font-bold text-slate-900 leading-none">Reposiciones</h1>
-                    <span class="text-sm font-logo tracking-widest text-indigo-600 font-semibold lowercase">La Mediterrània</span>
+                <div class="flex items-center pt-1">
+                    <span class="text-lg md:text-xl font-logo text-white leading-none tracking-widest mt-1 uppercase opacity-90">la</span>
+                    <h1 class="text-4xl md:text-5xl font-normal text-white leading-none font-logo pr-2 drop-shadow-md ml-1 lowercase">mediterrània</h1>
                 </div>
             </div>
-            <!-- Botón de info opcional o logo pequeño -->
-        </div>
-    </header>
 
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-24">
-        
-        <!-- Estado de Carga -->
-        <div id="loading" class="flex flex-col items-center justify-center py-20 gap-3">
-            <i data-lucide="loader-2" class="w-10 h-10 text-indigo-600 animate-spin"></i>
-            <span class="text-slate-500 font-medium animate-pulse">Sincronizando...</span>
-        </div>
+            <!-- Derecha: Tag -->
+            <div class="flex items-center hidden sm:flex">
+                <div class="bg-emerald-900/40 border border-emerald-800/50 px-3 py-1.5 rounded-lg text-emerald-400 font-bold text-xs uppercase tracking-widest shadow-inner">
+                    Reposiciones
+                </div>
+            </div>
+        </header>
 
-        <div id="app-content" class="hidden-view">
-            
-            <!-- Formulario de Entrada -->
-            <div id="form-container" class="bg-white rounded-[2rem] shadow-sm shadow-slate-200/50 border border-slate-200/60 p-5 sm:p-6 mb-8 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 opacity-20"></div>
-                <form id="add-form">
-                    <div class="mb-5">
-                        <label for="item-input" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
-                            <i data-lucide="pen-line" class="w-4 h-4 text-slate-400"></i> ¿Qué hace falta en el local?
-                        </label>
-                        <input
-                            type="text"
-                            id="item-input"
-                            required
-                            placeholder='Ej: "Se ha agotado el Seagrams"'
-                            class="w-full text-lg p-4 bg-slate-50/50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none shadow-inner font-medium placeholder-slate-400"
-                            autocomplete="off"
-                        >
-                    </div>
+        <main>
+            <!-- Banner Fotográfico -->
+            <div class="mb-8 relative rounded-[2rem] overflow-hidden shadow-2xl border border-slate-700/50 h-36 md:h-48 animate-fade-in">
+                <!-- Se asume que la imagen se subirá a GitHub junto al index.html. Tiene un fallback por si tarda en cargar -->
+                <img src="./photo_5780533618710089649_y.jpg" alt="Barra de La Mediterrània" class="absolute inset-0 w-full h-full object-cover object-center opacity-80" onerror="this.src='https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1000&auto=format&fit=crop';">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/30 to-transparent"></div>
+                <div class="absolute bottom-5 left-5 sm:left-6 z-10">
+                    <p class="text-emerald-400 font-bold text-xs uppercase tracking-widest drop-shadow-md mb-1 flex items-center gap-1.5">
+                        <i data-lucide="glass-water" class="w-3.5 h-3.5"></i> Control de Stock
+                    </p>
+                    <h2 class="text-white font-black text-2xl sm:text-3xl drop-shadow-lg tracking-tight">Nuestra Barra</h2>
+                </div>
+            </div>
 
-                    <div class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-                        <div class="flex gap-2 w-full sm:w-auto p-1 bg-slate-100/80 rounded-xl" id="urgency-buttons">
-                            <button type="button" onclick="setUrgency('alta')" id="urg-alta" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-white shadow-sm text-red-600 border border-slate-200 relative overflow-hidden">
-                                <span class="absolute inset-0 bg-red-50 opacity-0 transition-opacity"></span>
-                                <i data-lucide="alert-triangle" class="w-4 h-4 z-10"></i> <span class="z-10">Agotado</span>
-                            </button>
-                            <button type="button" onclick="setUrgency('media')" id="urg-media" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700">
-                                <i data-lucide="clock" class="w-4 h-4"></i> Queda poco
-                            </button>
+            <!-- Estado de Carga -->
+            <div id="loading" class="flex flex-col items-center justify-center py-20 gap-3">
+                <i data-lucide="loader-2" class="w-10 h-10 text-emerald-500 animate-spin"></i>
+                <span class="text-slate-300 font-medium animate-pulse">Sincronizando con el local...</span>
+            </div>
+
+            <div id="app-content" class="hidden-view">
+                
+                <!-- Titular de la vista en móvil -->
+                <h2 class="text-2xl font-black text-white mb-4 sm:hidden drop-shadow-md flex items-center gap-2">
+                    <i data-lucide="clipboard-list" class="w-6 h-6 text-emerald-400"></i> Reposiciones
+                </h2>
+
+                <!-- Formulario de Entrada -->
+                <div id="form-container" class="bg-slate-900/60 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-slate-700/40 p-5 sm:p-6 mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 opacity-50"></div>
+                    <form id="add-form">
+                        <div class="mb-6">
+                            <label for="item-input" class="block text-sm font-bold text-slate-300 mb-2 flex items-center gap-2 drop-shadow-sm">
+                                <i data-lucide="pen-line" class="w-4 h-4 text-emerald-400"></i> ¿Qué hace falta en el local?
+                            </label>
+                            <input
+                                type="text"
+                                id="item-input"
+                                required
+                                placeholder='Ej: "Se ha agotado el Seagrams"'
+                                class="w-full text-lg p-4 bg-slate-900/80 border border-slate-700/60 rounded-2xl focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 text-white transition-all outline-none shadow-inner font-medium placeholder-slate-500 backdrop-blur-sm"
+                                autocomplete="off"
+                            >
                         </div>
 
-                        <button type="submit" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/20 active:scale-[0.98]">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                            Añadir Aviso
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                            <div class="flex gap-2 w-full sm:w-auto p-1 bg-slate-950/50 rounded-xl border border-slate-800/50" id="urgency-buttons">
+                                <button type="button" onclick="setUrgency('alta')" id="urg-alta" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-red-900/40 shadow-sm text-red-400 border border-red-500/50 relative overflow-hidden">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 z-10"></i> <span class="z-10">Agotado</span>
+                                </button>
+                                <button type="button" onclick="setUrgency('media')" id="urg-media" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/80 border border-transparent">
+                                    <i data-lucide="clock" class="w-4 h-4"></i> Queda poco
+                                </button>
+                            </div>
 
-            <!-- Cabecera de la Lista -->
-            <div class="flex items-center justify-between mb-4 px-2">
-                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Lista de Pendientes</h2>
-                <span id="counter-badge" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-full">0</span>
-            </div>
-
-            <!-- Lista de Reposiciones -->
-            <div id="items-list" class="space-y-3">
-                <!-- Los items se inyectan aquí con JS -->
-            </div>
-            
-            <!-- Mensaje de lista vacía -->
-            <div id="empty-state" class="hidden-view flex flex-col items-center justify-center py-16 px-4 bg-white/50 rounded-[2rem] border-2 border-slate-200 border-dashed">
-                <div class="bg-slate-100 p-4 rounded-full mb-4">
-                    <i data-lucide="check-check" class="h-8 w-8 text-slate-400"></i>
+                            <button type="submit" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600/90 hover:bg-emerald-500 backdrop-blur-sm text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg border border-emerald-500/50 active:scale-[0.98]">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                                Añadir Aviso
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800">Todo al día</h3>
-                <p class="text-slate-500 text-center mt-1 text-sm max-w-[250px]">No hay reposiciones pendientes. ¡El local está a tope!</p>
+
+                <!-- Cabecera de la Lista -->
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider drop-shadow-sm flex items-center gap-2">
+                        Lista de Pendientes
+                    </h2>
+                    <span id="counter-badge" class="bg-emerald-900/50 border border-emerald-800/50 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full shadow-inner">0</span>
+                </div>
+
+                <!-- Lista de Reposiciones -->
+                <div id="items-list" class="space-y-3">
+                    <!-- Los items se inyectan aquí con JS -->
+                </div>
+                
+                <!-- Mensaje de lista vacía -->
+                <div id="empty-state" class="hidden-view flex flex-col items-center justify-center py-16 px-4 bg-slate-900/60 backdrop-blur-md rounded-[2rem] border border-slate-700/50 border-dashed shadow-inner">
+                    <div class="bg-slate-800/80 p-4 rounded-full mb-4 border border-slate-700/50">
+                        <i data-lucide="check-check" class="h-8 w-8 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-lg font-black text-white drop-shadow-md">Todo al día</h3>
+                    <p class="text-slate-400 text-center mt-1 text-sm max-w-[250px]">No hay reposiciones pendientes. ¡El local está a tope!</p>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <!-- Modal de Confirmación de Reposición -->
-    <div id="modal-confirm" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 max-w-sm w-full relative overflow-hidden animate-enter">
+    <div id="modal-confirm" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-slate-900/95 border border-slate-700/60 rounded-3xl shadow-2xl p-6 sm:p-8 max-w-sm w-full relative overflow-hidden animate-enter backdrop-blur-xl">
             <div class="absolute top-0 left-0 right-0 h-1 bg-emerald-500"></div>
             
             <div class="text-center mb-6">
-                <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600">
+                <div class="bg-slate-800/80 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400 border border-slate-700/50 shadow-inner">
                     <i data-lucide="check-circle-2" class="w-8 h-8"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900">¿Producto repuesto?</h3>
-                <p class="text-sm text-slate-500 mt-2 leading-relaxed" id="modal-item-text">...</p>
+                <h3 class="text-xl font-black text-white">¿Producto repuesto?</h3>
+                <div class="bg-slate-950/60 rounded-xl p-4 mt-4 border border-slate-800/60 shadow-inner">
+                    <p class="text-base font-medium text-emerald-300 break-words leading-relaxed" id="modal-item-text">...</p>
+                </div>
             </div>
             
             <div class="flex flex-col gap-3">
-                <button type="button" id="btn-confirm-delete" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all text-sm shadow-md flex justify-center items-center gap-2">
-                    Sí, eliminar de la lista
+                <button type="button" id="btn-confirm-delete" class="w-full py-3.5 bg-emerald-600/90 hover:bg-emerald-500 border border-emerald-500/50 text-white rounded-xl font-black transition-all text-sm shadow-md flex justify-center items-center gap-2">
+                    SÍ, ELIMINAR DE LA LISTA
                 </button>
-                <button type="button" onclick="cerrarModal()" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-all text-sm">
+                <button type="button" onclick="cerrarModal()" class="w-full py-3.5 bg-slate-800/80 hover:bg-slate-700 border border-slate-700/50 text-slate-300 hover:text-white rounded-xl font-bold transition-all text-sm shadow-md">
                     Cancelar
                 </button>
             </div>
@@ -161,9 +209,9 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // TUS CLAVES DE FIREBASE DE LA APP DE FICHAJES
+        // CONFIGURACIÓN DE TU FIREBASE (Fichajes)
         const firebaseConfig = {
             apiKey: "AIzaSyB9PbJS02DWqrbQYLSC50cNhTWsUL9TwP4",
             authDomain: "fichajes-9e04f.firebaseapp.com",
@@ -177,33 +225,36 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Colección separada para que no se mezcle con los fichajes
+        const reposicionesRef = collection(db, 'reposiciones_app');
+
         // Variables de Estado
         let currentUrgency = 'alta';
         let allItems = [];
         let itemToDeleteId = null;
 
-        // UI: Urgencia
+        // UI: Urgencia (Actualizado a tema oscuro)
         window.setUrgency = function(level) {
             currentUrgency = level;
             const btnAlta = document.getElementById('urg-alta');
             const btnMedia = document.getElementById('urg-media');
 
-            // Resetear
-            btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700";
-            btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700";
+            // Resetear (Estilo inactivo oscuro)
+            btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/80 border border-transparent";
+            btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-400 hover:text-white hover:bg-slate-800/80 border border-transparent";
             
-            // Quitar spans hijos extras para limpiar
+            // Textos por defecto
             btnAlta.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> Agotado`;
             btnMedia.innerHTML = `<i data-lucide="clock" class="w-4 h-4"></i> Queda poco`;
 
-            // Activar seleccionado
+            // Activar seleccionado con colores neón/oscuros
             if (level === 'alta') {
-                btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-white shadow-sm text-red-600 border border-slate-200 relative overflow-hidden";
-                btnAlta.innerHTML = `<span class="absolute inset-0 bg-red-50 opacity-100 transition-opacity"></span><i data-lucide="alert-triangle" class="w-4 h-4 z-10"></i> <span class="z-10">Agotado</span>`;
+                btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-red-900/40 shadow-sm text-red-400 border border-red-500/50 relative overflow-hidden";
+                btnAlta.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 z-10"></i> <span class="z-10">Agotado</span>`;
             }
             if (level === 'media') {
-                btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-white shadow-sm text-amber-600 border border-slate-200 relative overflow-hidden";
-                btnMedia.innerHTML = `<span class="absolute inset-0 bg-amber-50 opacity-100 transition-opacity"></span><i data-lucide="clock" class="w-4 h-4 z-10"></i> <span class="z-10">Queda poco</span>`;
+                btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-amber-900/40 shadow-sm text-amber-400 border border-amber-500/50 relative overflow-hidden";
+                btnMedia.innerHTML = `<i data-lucide="clock" class="w-4 h-4 z-10"></i> <span class="z-10">Queda poco</span>`;
             }
             lucide.createIcons();
         };
@@ -232,31 +283,31 @@
                 const isAlta = item.urgency === 'alta';
                 
                 let urgencyBadge = isAlta 
-                    ? `<span class="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-[10px] font-bold text-red-700 ring-1 ring-inset ring-red-600/20 uppercase tracking-wider"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Agotado</span>`
-                    : `<span class="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-700 ring-1 ring-inset ring-amber-600/20 uppercase tracking-wider"><i data-lucide="clock" class="w-3 h-3"></i> Queda poco</span>`;
+                    ? `<span class="inline-flex items-center gap-1 rounded-md bg-red-900/40 px-2 py-1 text-[10px] font-bold text-red-400 ring-1 ring-inset ring-red-500/30 uppercase tracking-wider"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Agotado</span>`
+                    : `<span class="inline-flex items-center gap-1 rounded-md bg-amber-900/40 px-2 py-1 text-[10px] font-bold text-amber-400 ring-1 ring-inset ring-amber-500/30 uppercase tracking-wider"><i data-lucide="clock" class="w-3 h-3"></i> Queda poco</span>`;
 
                 const html = `
-                    <div class="animate-enter bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4 items-start sm:items-center hover:border-indigo-300 hover:shadow-md transition-all group">
+                    <div class="animate-enter bg-slate-900/60 backdrop-blur-md p-4 sm:p-5 rounded-2xl shadow-lg border border-slate-700/50 flex flex-col sm:flex-row gap-4 items-start sm:items-center hover:border-emerald-500/30 hover:bg-slate-800/80 transition-all group">
                         
                         <div class="flex-grow min-w-0 w-full">
                             <div class="flex items-center gap-2 mb-2">
                                 ${urgencyBadge}
                                 <span class="text-xs text-slate-400 font-medium flex items-center gap-1 ml-auto sm:ml-0"><i data-lucide="calendar-clock" class="w-3 h-3"></i> ${timeStr}</span>
                             </div>
-                            <p class="text-lg font-bold text-slate-800 break-words leading-tight">
+                            <p class="text-lg font-bold text-white break-words leading-tight drop-shadow-sm">
                                 ${item.text}
                             </p>
                         </div>
 
-                        <div class="flex items-center gap-2 w-full sm:w-auto pt-3 sm:pt-0 border-t border-slate-100 sm:border-0 mt-2 sm:mt-0">
-                            <!-- Botón Avisar optimizado -->
-                            <button onclick="shareItem('${item.text}', '${item.urgency}')" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-50/50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-sm font-bold transition-colors">
+                        <div class="flex items-center gap-2 w-full sm:w-auto pt-3 sm:pt-0 border-t border-slate-800/60 sm:border-0 mt-2 sm:mt-0">
+                            <!-- Botón Avisar NATIVO -->
+                            <button onclick="shareItem('${item.text}', '${item.urgency}')" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-800 hover:bg-blue-900/40 text-slate-300 hover:text-blue-400 border border-slate-700 hover:border-blue-500/50 rounded-xl text-sm font-bold transition-colors">
                                 <i data-lucide="send" class="w-4 h-4"></i>
                                 Avisar
                             </button>
                             
-                            <!-- Botón Repuesto (Eliminar) -->
-                            <button onclick="preguntarEliminar('${item.id}', \`${item.text.replace(/`/g, "'")}\`)" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-emerald-100 text-slate-600 hover:text-emerald-700 rounded-xl text-sm font-bold transition-colors">
+                            <!-- Botón Repuesto -->
+                            <button onclick="preguntarEliminar('${item.id}', \`${item.text.replace(/`/g, "'")}\`)" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-800 hover:bg-emerald-900/40 text-slate-300 hover:text-emerald-400 border border-slate-700 hover:border-emerald-500/50 rounded-xl text-sm font-bold transition-colors">
                                 <i data-lucide="check-circle" class="w-4 h-4"></i>
                                 Repuesto
                             </button>
@@ -268,15 +319,14 @@
             lucide.createIcons();
         }
 
-        // --- FUNCIONES FIREBASE ---
-        const reposicionesRef = collection(db, 'reposiciones_app');
-
-        // Autenticación Anónima (Silenciosa)
+        // --- LÓGICA PRINCIPAL ---
+        
+        // Autenticación Silenciosa
         signInAnonymously(auth).catch((error) => console.error("Error Auth:", error));
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Escuchar datos (ordenados en memoria como te recomendaba antes, o con query si tienes índices)
+                // Escuchar datos en tiempo real
                 onSnapshot(reposicionesRef, (snapshot) => {
                     allItems = [];
                     snapshot.forEach((doc) => {
@@ -288,6 +338,7 @@
                     
                     document.getElementById('loading').classList.add('hidden-view');
                     document.getElementById('app-content').classList.remove('hidden-view');
+                    document.getElementById('app-content').classList.add('animate-fade-in');
                     renderItems();
                 });
             }
@@ -314,9 +365,9 @@
                 input.value = '';
                 setUrgency('alta');
                 
-                // Efecto visual sutil de éxito en el input
-                input.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-50');
-                setTimeout(() => input.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-50'), 1000);
+                // Efecto visual de éxito
+                input.classList.add('ring-2', 'ring-emerald-400');
+                setTimeout(() => input.classList.remove('ring-2', 'ring-emerald-400'), 1000);
             } catch (error) {
                 alert("Error al añadir. Revisa tu conexión.");
             } finally {
@@ -326,7 +377,7 @@
             }
         });
 
-        // --- LÓGICA DE ELIMINAR (MODAL) ---
+        // --- ELIMINAR (MODAL) ---
         window.preguntarEliminar = function(id, text) {
             itemToDeleteId = id;
             document.getElementById('modal-item-text').textContent = text;
@@ -360,13 +411,13 @@
             }
         });
 
-        // --- LÓGICA DE COMPARTIR (AVISAR NATIVO) ---
+        // --- SISTEMA DE AVISO (WhatsApp / Nativo) ---
         window.shareItem = async (text, urgency) => {
             let urgencyText = urgency === 'alta' ? '🚨 AGOTADO' : '⚠️ QUEDA POCO';
-            // Mensaje formateado para WhatsApp
+            // Mensaje formateado
             const message = `*Aviso La Mediterrània*\n\n${urgencyText}:\n_${text}_`;
 
-            // 1. Intentar Web Share API nativa (iPad/iPhone)
+            // 1. Intentar Web Share API nativa (Abre el menú de compartir de iOS/Android)
             if (navigator.share) {
                 try {
                     await navigator.share({
@@ -374,19 +425,17 @@
                     });
                     return; // Si funciona, salimos
                 } catch (error) {
-                    console.log('Error o usuario canceló share:', error);
-                    // Si el usuario cancela, es un error tipo "AbortError", no hacemos fallback
+                    console.log('Cancelado o no soportado:', error);
                     if (error.name === 'AbortError') return; 
                 }
             } 
             
-            // 2. Fallback a WhatsApp Web/App si Web Share API falla o no está disponible
-            // Usamos encodeURIComponent para asegurar que los espacios y emojis pasen bien en la URL
+            // 2. Fallback a WhatsApp
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         };
 
-        // Inicializar iconos al cargar
+        // Inicializar iconos
         lucide.createIcons();
     </script>
 </body>
