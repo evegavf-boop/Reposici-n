@@ -15,113 +15,155 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Fuentes para mantener la estética -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: #f8fafc; /* slate-50 */
             color: #1e293b; /* slate-800 */
         }
+        .font-logo {
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 0.02em;
+        }
         .hidden-view { display: none !important; }
+        
+        /* Animaciones para App Nativa */
+        .animate-enter { animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-leave { animation: fadeOut 0.2s ease-in forwards; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
     </style>
 </head>
-<body class="min-h-screen pb-20 selection:bg-indigo-100">
+<body class="min-h-screen selection:bg-indigo-100 bg-slate-50">
 
-    <!-- Cabecera -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-        <div class="max-w-4xl mx-auto px-4 py-5 sm:px-6 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                    <i data-lucide="plus-circle" class="text-indigo-600 w-7 h-7"></i>
-                    Reposiciones
-                </h1>
-                <p class="text-sm text-slate-500 mt-1">Apunta lo que falta en el local</p>
+    <!-- Cabecera Elegante -->
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-20 border-b border-slate-200/60">
+        <div class="max-w-3xl mx-auto px-4 py-4 sm:px-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2 rounded-xl shadow-inner shadow-indigo-800/20 text-white">
+                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 leading-none">Reposiciones</h1>
+                    <span class="text-sm font-logo tracking-widest text-indigo-600 font-semibold lowercase">La Mediterrània</span>
+                </div>
             </div>
-            <div class="flex bg-slate-100 p-1 rounded-lg">
-                <button id="btn-view-pendientes" onclick="switchView('pendientes')" class="px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white shadow text-indigo-700">
-                    Faltan
-                </button>
-                <button id="btn-view-completados" onclick="switchView('completados')" class="px-4 py-2 rounded-md text-sm font-medium transition-colors text-slate-600 hover:text-slate-900">
-                    Comprados
-                </button>
-            </div>
+            <!-- Botón de info opcional o logo pequeño -->
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-6 pb-24">
         
         <!-- Estado de Carga -->
-        <div id="loading" class="flex justify-center py-12">
+        <div id="loading" class="flex flex-col items-center justify-center py-20 gap-3">
             <i data-lucide="loader-2" class="w-10 h-10 text-indigo-600 animate-spin"></i>
+            <span class="text-slate-500 font-medium animate-pulse">Sincronizando...</span>
         </div>
 
         <div id="app-content" class="hidden-view">
-            <!-- Formulario de entrada (Solo en pendientes) -->
-            <div id="form-container" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-8">
+            
+            <!-- Formulario de Entrada -->
+            <div id="form-container" class="bg-white rounded-[2rem] shadow-sm shadow-slate-200/50 border border-slate-200/60 p-5 sm:p-6 mb-8 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 opacity-20"></div>
                 <form id="add-form">
-                    <div class="mb-4">
-                        <label for="item" class="block text-sm font-medium text-slate-700 mb-2">
-                            ¿Qué necesitamos?
+                    <div class="mb-5">
+                        <label for="item-input" class="block text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                            <i data-lucide="pen-line" class="w-4 h-4 text-slate-400"></i> ¿Qué hace falta en el local?
                         </label>
                         <input
                             type="text"
                             id="item-input"
                             required
-                            placeholder='Ej: "No queda nada de Seagrams"'
-                            class="w-full text-lg p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                            placeholder='Ej: "Se ha agotado el Seagrams"'
+                            class="w-full text-lg p-4 bg-slate-50/50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none shadow-inner font-medium placeholder-slate-400"
                             autocomplete="off"
                         >
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-                        <div class="flex gap-2 w-full sm:w-auto" id="urgency-buttons">
-                            <button type="button" onclick="setUrgency('alta')" id="urg-alta" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-red-100 text-red-700 border-2 border-red-200">
-                                <i data-lucide="alert-triangle" class="w-4 h-4"></i> Agotado
+                        <div class="flex gap-2 w-full sm:w-auto p-1 bg-slate-100/80 rounded-xl" id="urgency-buttons">
+                            <button type="button" onclick="setUrgency('alta')" id="urg-alta" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-white shadow-sm text-red-600 border border-slate-200 relative overflow-hidden">
+                                <span class="absolute inset-0 bg-red-50 opacity-0 transition-opacity"></span>
+                                <i data-lucide="alert-triangle" class="w-4 h-4 z-10"></i> <span class="z-10">Agotado</span>
                             </button>
-                            <button type="button" onclick="setUrgency('media')" id="urg-media" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100">
+                            <button type="button" onclick="setUrgency('media')" id="urg-media" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700">
                                 <i data-lucide="clock" class="w-4 h-4"></i> Queda poco
-                            </button>
-                            <button type="button" onclick="setUrgency('baja')" id="urg-baja" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100">
-                                <i data-lucide="info" class="w-4 h-4"></i> Aviso
                             </button>
                         </div>
 
-                        <button type="submit" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors">
-                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                            Añadir a la lista
+                        <button type="submit" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-md shadow-indigo-600/20 active:scale-[0.98]">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                            Añadir Aviso
                         </button>
                     </div>
                 </form>
             </div>
 
+            <!-- Cabecera de la Lista -->
+            <div class="flex items-center justify-between mb-4 px-2">
+                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider">Lista de Pendientes</h2>
+                <span id="counter-badge" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-1 rounded-full">0</span>
+            </div>
+
             <!-- Lista de Reposiciones -->
-            <div id="items-list" class="space-y-4">
+            <div id="items-list" class="space-y-3">
                 <!-- Los items se inyectan aquí con JS -->
             </div>
             
             <!-- Mensaje de lista vacía -->
-            <div id="empty-state" class="hidden-view text-center py-16 bg-white rounded-2xl border border-slate-200 border-dashed">
-                <i data-lucide="check-circle-2" class="mx-auto h-12 w-12 text-slate-300 mb-3 block"></i>
-                <h3 class="text-lg font-medium text-slate-900">Todo al día</h3>
-                <p class="text-slate-500" id="empty-text">No hay ninguna reposición pendiente.</p>
+            <div id="empty-state" class="hidden-view flex flex-col items-center justify-center py-16 px-4 bg-white/50 rounded-[2rem] border-2 border-slate-200 border-dashed">
+                <div class="bg-slate-100 p-4 rounded-full mb-4">
+                    <i data-lucide="check-check" class="h-8 w-8 text-slate-400"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800">Todo al día</h3>
+                <p class="text-slate-500 text-center mt-1 text-sm max-w-[250px]">No hay reposiciones pendientes. ¡El local está a tope!</p>
             </div>
         </div>
     </main>
 
-    <!-- Tarjeta de información para la responsable -->
-    <div class="fixed bottom-0 left-0 right-0 bg-indigo-50 border-t border-indigo-100 p-3 sm:p-4 text-center z-20">
-        <p class="text-sm text-indigo-800 flex items-center justify-center gap-2">
-            <i data-lucide="info" class="w-4 h-4"></i>
-            Abre esta app en tu móvil para ver las actualizaciones en tiempo real.
-        </p>
+    <!-- Modal de Confirmación de Reposición -->
+    <div id="modal-confirm" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 max-w-sm w-full relative overflow-hidden animate-enter">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-emerald-500"></div>
+            
+            <div class="text-center mb-6">
+                <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600">
+                    <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">¿Producto repuesto?</h3>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed" id="modal-item-text">...</p>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button type="button" id="btn-confirm-delete" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all text-sm shadow-md flex justify-center items-center gap-2">
+                    Sí, eliminar de la lista
+                </button>
+                <button type="button" onclick="cerrarModal()" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-all text-sm">
+                    Cancelar
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- FIREBASE Y LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // TUS CLAVES DE FIREBASE (Tomadas de tu App de Fichajes)
+        // TUS CLAVES DE FIREBASE DE LA APP DE FICHAJES
         const firebaseConfig = {
             apiKey: "AIzaSyB9PbJS02DWqrbQYLSC50cNhTWsUL9TwP4",
             authDomain: "fichajes-9e04f.firebaseapp.com",
@@ -136,103 +178,87 @@
         const db = getFirestore(app);
 
         // Variables de Estado
-        let currentView = 'pendientes'; // 'pendientes' o 'completados'
         let currentUrgency = 'alta';
         let allItems = [];
+        let itemToDeleteId = null;
 
-        // Funciones de UI
-        window.switchView = function(view) {
-            currentView = view;
-            
-            // Estilos botones cabecera
-            const btnPendientes = document.getElementById('btn-view-pendientes');
-            const btnCompletados = document.getElementById('btn-view-completados');
-            
-            if (view === 'pendientes') {
-                btnPendientes.className = 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white shadow text-indigo-700';
-                btnCompletados.className = 'px-4 py-2 rounded-md text-sm font-medium transition-colors text-slate-600 hover:text-slate-900';
-                document.getElementById('form-container').classList.remove('hidden-view');
-            } else {
-                btnCompletados.className = 'px-4 py-2 rounded-md text-sm font-medium transition-colors bg-white shadow text-emerald-700';
-                btnPendientes.className = 'px-4 py-2 rounded-md text-sm font-medium transition-colors text-slate-600 hover:text-slate-900';
-                document.getElementById('form-container').classList.add('hidden-view');
-            }
-
-            renderItems();
-        };
-
+        // UI: Urgencia
         window.setUrgency = function(level) {
             currentUrgency = level;
             const btnAlta = document.getElementById('urg-alta');
             const btnMedia = document.getElementById('urg-media');
-            const btnBaja = document.getElementById('urg-baja');
 
-            // Resetear todos
-            btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100";
-            btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100";
-            btnBaja.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100";
+            // Resetear
+            btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700";
+            btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-700";
+            
+            // Quitar spans hijos extras para limpiar
+            btnAlta.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4"></i> Agotado`;
+            btnMedia.innerHTML = `<i data-lucide="clock" class="w-4 h-4"></i> Queda poco`;
 
             // Activar seleccionado
-            if (level === 'alta') btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-red-100 text-red-700 border-2 border-red-200";
-            if (level === 'media') btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-amber-100 text-amber-700 border-2 border-amber-200";
-            if (level === 'baja') btnBaja.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all bg-blue-100 text-blue-700 border-2 border-blue-200";
+            if (level === 'alta') {
+                btnAlta.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-white shadow-sm text-red-600 border border-slate-200 relative overflow-hidden";
+                btnAlta.innerHTML = `<span class="absolute inset-0 bg-red-50 opacity-100 transition-opacity"></span><i data-lucide="alert-triangle" class="w-4 h-4 z-10"></i> <span class="z-10">Agotado</span>`;
+            }
+            if (level === 'media') {
+                btnMedia.className = "flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-bold transition-all bg-white shadow-sm text-amber-600 border border-slate-200 relative overflow-hidden";
+                btnMedia.innerHTML = `<span class="absolute inset-0 bg-amber-50 opacity-100 transition-opacity"></span><i data-lucide="clock" class="w-4 h-4 z-10"></i> <span class="z-10">Queda poco</span>`;
+            }
+            lucide.createIcons();
         };
 
         // Renderizar Lista
         function renderItems() {
             const container = document.getElementById('items-list');
             const emptyState = document.getElementById('empty-state');
-            const emptyText = document.getElementById('empty-text');
+            const counter = document.getElementById('counter-badge');
             
             container.innerHTML = '';
-            
-            const filteredItems = allItems.filter(item => currentView === 'pendientes' ? !item.completed : item.completed);
+            counter.textContent = allItems.length;
 
-            if (filteredItems.length === 0) {
+            if (allItems.length === 0) {
                 container.classList.add('hidden-view');
                 emptyState.classList.remove('hidden-view');
-                emptyText.textContent = currentView === 'pendientes' ? 'No hay ninguna reposición pendiente.' : 'Aún no se ha marcado nada como repuesto.';
                 return;
             }
 
             container.classList.remove('hidden-view');
             emptyState.classList.add('hidden-view');
 
-            filteredItems.forEach(item => {
+            allItems.forEach(item => {
                 const date = new Date(item.timestamp);
                 const timeStr = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                const isAlta = item.urgency === 'alta';
                 
-                let urgencyBadge = '';
-                if (item.urgency === 'alta') urgencyBadge = `<span class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Agotado</span>`;
-                if (item.urgency === 'media') urgencyBadge = `<span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20"><i data-lucide="clock" class="w-3 h-3"></i> Queda poco</span>`;
-                if (item.urgency === 'baja') urgencyBadge = `<span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20"><i data-lucide="info" class="w-3 h-3"></i> Aviso</span>`;
+                let urgencyBadge = isAlta 
+                    ? `<span class="inline-flex items-center gap-1 rounded-md bg-red-50 px-2 py-1 text-[10px] font-bold text-red-700 ring-1 ring-inset ring-red-600/20 uppercase tracking-wider"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Agotado</span>`
+                    : `<span class="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-700 ring-1 ring-inset ring-amber-600/20 uppercase tracking-wider"><i data-lucide="clock" class="w-3 h-3"></i> Queda poco</span>`;
 
                 const html = `
-                    <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border flex flex-col sm:flex-row gap-4 items-start sm:items-center transition-all ${item.completed ? 'border-slate-200 opacity-70' : 'border-slate-200 hover:border-indigo-200 hover:shadow-md'}">
+                    <div class="animate-enter bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4 items-start sm:items-center hover:border-indigo-300 hover:shadow-md transition-all group">
                         
-                        <button onclick="toggleItem('${item.id}', ${item.completed})" class="flex-shrink-0 mt-1 sm:mt-0 focus:outline-none ${item.completed ? 'text-emerald-500' : 'text-slate-300 hover:text-indigo-600'} transition-colors">
-                            <i data-lucide="${item.completed ? 'check-circle-2' : 'circle'}" class="w-8 h-8"></i>
-                        </button>
-
                         <div class="flex-grow min-w-0 w-full">
-                            <div class="flex items-center gap-2 mb-1">
+                            <div class="flex items-center gap-2 mb-2">
                                 ${urgencyBadge}
-                                <span class="text-xs text-slate-400 ml-auto sm:ml-0">${timeStr}</span>
+                                <span class="text-xs text-slate-400 font-medium flex items-center gap-1 ml-auto sm:ml-0"><i data-lucide="calendar-clock" class="w-3 h-3"></i> ${timeStr}</span>
                             </div>
-                            <p class="text-lg font-medium break-words ${item.completed ? 'text-slate-500 line-through' : 'text-slate-900'}">
+                            <p class="text-lg font-bold text-slate-800 break-words leading-tight">
                                 ${item.text}
                             </p>
                         </div>
 
                         <div class="flex items-center gap-2 w-full sm:w-auto pt-3 sm:pt-0 border-t border-slate-100 sm:border-0 mt-2 sm:mt-0">
-                            ${!item.completed ? `
-                                <button onclick="shareItem('${item.text}', '${item.urgency}')" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 rounded-lg text-sm font-medium transition-colors">
-                                    <i data-lucide="smartphone" class="w-4 h-4"></i>
-                                    <span class="sm:hidden lg:inline">Avisar</span>
-                                </button>
-                            ` : ''}
-                            <button onclick="deleteItem('${item.id}')" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors ml-auto sm:ml-0">
-                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            <!-- Botón Avisar optimizado -->
+                            <button onclick="shareItem('${item.text}', '${item.urgency}')" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-50/50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-sm font-bold transition-colors">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                Avisar
+                            </button>
+                            
+                            <!-- Botón Repuesto (Eliminar) -->
+                            <button onclick="preguntarEliminar('${item.id}', \`${item.text.replace(/`/g, "'")}\`)" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-emerald-100 text-slate-600 hover:text-emerald-700 rounded-xl text-sm font-bold transition-colors">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                Repuesto
                             </button>
                         </div>
                     </div>
@@ -243,14 +269,14 @@
         }
 
         // --- FUNCIONES FIREBASE ---
-        const reposicionesRef = collection(db, 'reposiciones');
+        const reposicionesRef = collection(db, 'reposiciones_app');
 
         // Autenticación Anónima (Silenciosa)
         signInAnonymously(auth).catch((error) => console.error("Error Auth:", error));
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Escuchar datos en tiempo real
+                // Escuchar datos (ordenados en memoria como te recomendaba antes, o con query si tienes índices)
                 onSnapshot(reposicionesRef, (snapshot) => {
                     allItems = [];
                     snapshot.forEach((doc) => {
@@ -274,61 +300,93 @@
             const text = input.value.trim();
             if (!text) return;
 
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Guardando...`;
+            btn.disabled = true;
+
             try {
                 await addDoc(reposicionesRef, {
                     text: text,
                     urgency: currentUrgency,
-                    completed: false,
                     timestamp: Date.now()
                 });
                 input.value = '';
-                setUrgency('alta'); // Volver a poner "Agotado" por defecto
+                setUrgency('alta');
+                
+                // Efecto visual sutil de éxito en el input
+                input.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-50');
+                setTimeout(() => input.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-50'), 1000);
             } catch (error) {
                 alert("Error al añadir. Revisa tu conexión.");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
             }
         });
 
-        // Marcar/Desmarcar
-        window.toggleItem = async (id, currentStatus) => {
+        // --- LÓGICA DE ELIMINAR (MODAL) ---
+        window.preguntarEliminar = function(id, text) {
+            itemToDeleteId = id;
+            document.getElementById('modal-item-text').textContent = text;
+            const modal = document.getElementById('modal-confirm');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.cerrarModal = function() {
+            const modal = document.getElementById('modal-confirm');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            itemToDeleteId = null;
+        };
+
+        document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
+            if (!itemToDeleteId) return;
+            const btn = document.getElementById('btn-confirm-delete');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Borrando...`;
+            
             try {
-                await updateDoc(doc(db, 'reposiciones', id), { completed: !currentStatus });
+                await deleteDoc(doc(db, 'reposiciones_app', itemToDeleteId));
+                cerrarModal();
             } catch (error) {
-                console.error("Error al actualizar:", error);
+                console.error("Error al eliminar:", error);
+                alert("Hubo un error al marcar como repuesto.");
+            } finally {
+                btn.innerHTML = originalText;
+                lucide.createIcons();
             }
-        };
+        });
 
-        // Eliminar
-        window.deleteItem = async (id) => {
-            if(confirm('¿Eliminar este aviso de reposición?')) {
-                try {
-                    await deleteDoc(doc(db, 'reposiciones', id));
-                } catch (error) {
-                    console.error("Error al eliminar:", error);
-                }
-            }
-        };
-
-        // Compartir / Avisar a Responsable
+        // --- LÓGICA DE COMPARTIR (AVISAR NATIVO) ---
         window.shareItem = async (text, urgency) => {
-            let urgencyText = urgency === 'alta' ? '🚨 AGOTADO' : urgency === 'media' ? '⚠️ QUEDA POCO' : 'ℹ️ AVISO';
-            const message = `Hola! Aviso de reposición en el local:\n\n${urgencyText}: ${text}`;
+            let urgencyText = urgency === 'alta' ? '🚨 AGOTADO' : '⚠️ QUEDA POCO';
+            // Mensaje formateado para WhatsApp
+            const message = `*Aviso La Mediterrània*\n\n${urgencyText}:\n_${text}_`;
 
+            // 1. Intentar Web Share API nativa (iPad/iPhone)
             if (navigator.share) {
                 try {
                     await navigator.share({
-                        title: 'Aviso de Reposición',
                         text: message,
                     });
+                    return; // Si funciona, salimos
                 } catch (error) {
-                    console.log('Error compartiendo:', error);
+                    console.log('Error o usuario canceló share:', error);
+                    // Si el usuario cancela, es un error tipo "AbortError", no hacemos fallback
+                    if (error.name === 'AbortError') return; 
                 }
-            } else {
-                // Fallback a WhatsApp
-                window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-            }
+            } 
+            
+            // 2. Fallback a WhatsApp Web/App si Web Share API falla o no está disponible
+            // Usamos encodeURIComponent para asegurar que los espacios y emojis pasen bien en la URL
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
         };
 
-        // Inicializar iconos
+        // Inicializar iconos al cargar
         lucide.createIcons();
     </script>
 </body>
